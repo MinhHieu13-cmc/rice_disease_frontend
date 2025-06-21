@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 // Import screens
 import HomeScreen from './src/screens/HomeScreen';
 import DiseaseDetailScreen from './src/screens/DiseaseDetailScreen';
-
+import ImagePredictScreen from './src/screens/ImagePredictScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -23,6 +23,10 @@ export default function App() {
           component={DiseaseDetailScreen} 
           options={{ title: 'Chi tiết Bệnh' }} 
         />
+          <Stack.Screen
+              name="ImagePredict"
+              component={ImagePredictScreen}
+          />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

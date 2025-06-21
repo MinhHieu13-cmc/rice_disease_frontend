@@ -1,36 +1,76 @@
 import React from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  ScrollView, 
-  TouchableOpacity 
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 
 const DiseaseDetailScreen = ({ route, navigation }) => {
-  const { diseaseData } = route.params;
+  const { result, diseaseData, imageUri } = route.params || {};
+  const data = result || diseaseData;
+
+  // Nếu không có dữ liệu, hiển thị thông báo lỗi
+  if (!data) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Không có dữ liệu để hiển thị.</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>Quay lại</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const hasConfidence = typeof data.confidence !== 'undefined';
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>{diseaseData.ten_benh}</Text>
-        
+        {/* ✅ Hiển thị ảnh nếu có */}
+        {imageUri && (
+          <Image
+            source={{ uri: imageUri }}
+            style={styles.image}
+          />
+        )}
+
+        {/* ✅ Tên bệnh */}
+        <Text style={styles.title}>{data.label || data.ten_benh || 'Không rõ'}</Text>
+
+        {/* ✅ Mức độ tin cậy nếu có */}
+        {hasConfidence && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Mức độ tin cậy:</Text>
+            <Text style={styles.sectionContent}>
+              {(data.confidence * 100).toFixed(2)}%
+            </Text>
+          </View>
+        )}
+
+        {/* ✅ Mô tả bệnh */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Mô tả bệnh:</Text>
-          <Text style={styles.sectionContent}>{diseaseData.mo_ta}</Text>
+          <Text style={styles.sectionContent}>{data.mo_ta || 'Không có mô tả.'}</Text>
         </View>
-        
+
+        {/* ✅ Giải pháp */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Giải pháp:</Text>
-          <Text style={styles.sectionContent}>{diseaseData.giai_phap}</Text>
+          <Text style={styles.sectionContent}>{data.giai_phap || 'Không có giải pháp.'}</Text>
         </View>
       </View>
 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.backButtonText}>Quay lại tìm kiếm</Text>
+        <Text style={styles.backButtonText}>Quay lại</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -48,6 +88,13 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     elevation: 3,
+  },
+  image: {
+    width: '100%',
+    height: 250,
+    resizeMode: 'contain',
+    borderRadius: 10,
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,

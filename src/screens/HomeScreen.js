@@ -109,6 +109,12 @@ const HomeScreen = ({ navigation }) => {
           3. Hệ thống sẽ hiển thị thông tin về mô tả và giải pháp cho bệnh lúa
         </Text>
       </View>
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => navigation.navigate('ImagePredict')}
+      >
+        <Text style={styles.buttonText}>Dự đoán bệnh qua ảnh</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -199,6 +205,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: '#555',
+  },
+  secondaryButton: {
+  backgroundColor: '#2196F3',
+  paddingVertical: 12,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginTop: 15,
   },
 });
 
